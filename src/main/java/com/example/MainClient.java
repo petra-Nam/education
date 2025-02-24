@@ -1,114 +1,109 @@
 
 package com.example;
 
+import java.awt.*;
+import java.io.*;
+import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.*;
 import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class MainClient extends JFrame {
 
-    private JTextField countryField, degreeField, locationField, courseField;
+    private JTextField degreeField;
+    private JTextField locationField;
+    private JTextField countryField;
     private JTextArea resultArea;
 
     public MainClient() {
-        setTitle("Matrob Education Website");
+        setTitle("Matrob Education Finder");
         setSize(800, 600);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-        // Top panel with title
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        JLabel titleLabel = new JLabel("Matrob Education Search");
-        titleLabel.setFont(new Font("Serif", Font.BOLD, 20));
-        topPanel.add(titleLabel);
+        JTabbedPane tabbedPane = new JTabbedPane();
 
-        // Main panel with GridBagLayout for better control
-        JPanel mainPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.anchor = GridBagConstraints.WEST;
-
-        JLabel countryLabel = new JLabel("Country:");
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        mainPanel.add(countryLabel, gbc);
-
-        countryField = new JTextField(20);
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        mainPanel.add(countryField, gbc);
-
-        JButton searchUniversitiesButton = new JButton("Search Universities");
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        mainPanel.add(searchUniversitiesButton, gbc);
-
-        JLabel degreeLabel = new JLabel("Degree:");
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        mainPanel.add(degreeLabel, gbc);
-
-        degreeField = new JTextField(20);
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        mainPanel.add(degreeField, gbc);
-
-        JLabel locationLabel = new JLabel("Location:");
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        mainPanel.add(locationLabel, gbc);
-
-        locationField = new JTextField(20);
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        mainPanel.add(locationField, gbc);
-
-        JButton searchScholarshipsButton = new JButton("Search Scholarships");
-        gbc.gridx = 2;
-        gbc.gridy = 2;
-        mainPanel.add(searchScholarshipsButton, gbc);
-
-        JLabel courseLabel = new JLabel("Course Topic:");
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        mainPanel.add(courseLabel, gbc);
-
-        courseField = new JTextField(20);
-        gbc.gridx = 1;
-        gbc.gridy = 3;
-        mainPanel.add(courseField, gbc);
-
-        JButton searchCoursesButton = new JButton("Search Courses");
-        gbc.gridx = 2;
-        gbc.gridy = 3;
-        mainPanel.add(searchCoursesButton, gbc);
+        // Scholarship Panel
+        JPanel scholarshipPanel = createScholarshipPanel();
+        JPanel universityPanel = createUniversityPanel();
 
         resultArea = new JTextArea();
         resultArea.setEditable(false);
-
-        // Bottom panel with scrollable text area
-        JPanel bottomPanel = new JPanel(new BorderLayout());
         JScrollPane scrollPane = new JScrollPane(resultArea);
-        bottomPanel.add(scrollPane, BorderLayout.CENTER);
 
-        add(topPanel, BorderLayout.NORTH);
-        add(mainPanel, BorderLayout.CENTER);
-        add(bottomPanel, BorderLayout.SOUTH);
+        tabbedPane.addTab("Scholarships", scholarshipPanel);
+        tabbedPane.addTab("Universities", universityPanel);
 
-        // Action listeners for buttons
-        searchUniversitiesButton.addActionListener(e -> searchUniversities());
-        searchScholarshipsButton.addActionListener(e -> searchScholarships());
-        searchCoursesButton.addActionListener(e -> searchCourses());
+        add(tabbedPane, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private JPanel createScholarshipPanel() {
+        JPanel scholarshipPanel = new JPanel();
+        scholarshipPanel.setLayout(new GridLayout(5, 1));
+
+        scholarshipPanel.add(new JLabel("Enter the degree type you're looking for (e.g., Bachelor, Master, PhD, or 'all' for all degrees):"));
+        degreeField = new JTextField();
+        scholarshipPanel.add(degreeField);
+
+        scholarshipPanel.add(new JLabel("Enter the location (country) you're looking for (e.g., United States, or 'all' for all locations):"));
+        locationField = new JTextField();
+        scholarshipPanel.add(locationField);
+
+        JButton scholarshipSearchButton = new JButton("Search Scholarships");
+        scholarshipSearchButton.addActionListener(e -> searchScholarships());
+        scholarshipPanel.add(scholarshipSearchButton);
+
+        return scholarshipPanel;
+    }
+
+    private JPanel createUniversityPanel() {
+        JPanel universityPanel = new JPanel();
+        universityPanel.setLayout(new GridLayout(3, 1));
+
+        universityPanel.add(new JLabel("Enter the country you're looking for universities in:"));
+        countryField = new JTextField();
+        universityPanel.add(countryField);
+
+        JButton universitySearchButton = new JButton("Search Universities");
+        universitySearchButton.addActionListener(e -> searchUniversities());
+        universityPanel.add(universitySearchButton);
+
+        return universityPanel;
+    }
+
+    private void searchScholarships() {
+        String csvFilePath = "scholarships.csv"; // Update with your file path
+        List<Scholarship> scholarships = readCSV(csvFilePath);
+
+        String degree = degreeField.getText().trim();
+        String location = locationField.getText().trim();
+
+        if (degree.isEmpty()) {
+            resultArea.setText("Please enter a degree.");
+            return;
+        }
+        if (location.isEmpty()) {
+            resultArea.setText("Please enter a location.");
+            return;
+        }
+
+        List<Scholarship> filteredScholarships = filterScholarships(scholarships, degree, location);
+
+        resultArea.setText("");
+        if (!filteredScholarships.isEmpty()) {
+            StringBuilder results = new StringBuilder();
+            for (Scholarship scholarship : filteredScholarships) {
+                results.append(scholarship.toString()).append("\n");
+            }
+            resultArea.setText(results.toString());
+        } else {
+            resultArea.setText("No scholarships found for the selected degree and location.");
+        }
     }
 
     private void searchUniversities() {
@@ -119,10 +114,9 @@ public class MainClient extends JFrame {
         }
 
         try {
-            // Call the API to get universities based on country
-            String apiUrl = "http://universities.hipolabs.com/search?country=" + country;
-            @SuppressWarnings("deprecation")
-            HttpURLConnection conn = (HttpURLConnection) new URL(apiUrl).openConnection();
+            String apiUrl = "http://universities.hipolabs.com/search?country=" + URLEncoder.encode(country, "UTF-8");
+            URL url = URI.create(apiUrl).toURL();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
 
@@ -139,125 +133,63 @@ public class MainClient extends JFrame {
             }
             conn.disconnect();
 
-            // Parse and display universities
             JSONArray universities = new JSONArray(response.toString());
             if (universities.length() == 0) {
                 resultArea.setText("No universities found for the country: " + country);
             } else {
-                StringBuilder sb = new StringBuilder("Universities in " + country + ":\n");
+                StringBuilder results = new StringBuilder("Universities in " + country + ":\n");
                 for (int i = 0; i < universities.length(); i++) {
                     JSONObject uni = universities.getJSONObject(i);
                     String name = uni.getString("name");
-                    String website = uni.getJSONArray("web_pages").getString(0);
-                    sb.append("University: ").append(name).append("\n");
-                    sb.append("Website: ").append(website).append("\n");
-                    sb.append("---------------------------------\n");
+                    JSONArray webPages = uni.getJSONArray("web_pages");
+                    if (webPages.length() > 0) {
+                        String website = webPages.getString(0);
+                        results.append("University: ").append(name).append("\n");
+                        results.append("Website: ").append(website).append("\n");
+                    } else {
+                        results.append("University: ").append(name).append("\n");
+                        results.append("Website: No website available\n");
+                    }
+                    results.append("---------------------------------\n");
                 }
-                resultArea.setText(sb.toString());
+                resultArea.setText(results.toString());
             }
         } catch (Exception e) {
+            resultArea.setText("An error occurred: " + e.getMessage());
             e.printStackTrace();
-            resultArea.setText("Error occurred while searching for universities.");
         }
     }
 
-    private void searchScholarships() {
-        String degree = degreeField.getText().trim();
-        String location = locationField.getText().trim();
-
-        if (degree.isEmpty()) {
-            resultArea.setText("Please enter a degree.");
-            return;
-        }
-
-        if (location.isEmpty()) {
-            resultArea.setText("Please enter a location.");
-            return;
-        }
-
-        // File path to the unzipped CSV file
-        String csvFilePath = "/Users/I750363/Desktop/educationsite/scholarships.csv";
-        List<Scholarship> scholarships = readCSV(csvFilePath);
-
-        // Filter scholarships by degree and location
-        List<Scholarship> filteredScholarships = filterScholarships(scholarships, degree, location);
-
-        // Display filtered scholarships
-        if (!filteredScholarships.isEmpty()) {
-            StringBuilder sb = new StringBuilder("Filtered Scholarships:\n");
-            for (Scholarship scholarship : filteredScholarships) {
-                sb.append(scholarship).append("\n");
-            }
-            resultArea.setText(sb.toString());
-        } else {
-            resultArea.setText("No scholarships found for the selected degree and location.");
-        }
-    }
-
-    private void searchCourses() {
-        String courseTopic = courseField.getText().trim();
-        if (courseTopic.isEmpty()) {
-            resultArea.setText("Please enter a course topic.");
-            return;
-        }
-
-        // Mock list of courses (you can replace this with an actual API or database query)
-        List<String> courses = Arrays.asList(
-                "Java Programming",
-                "Python for Data Science",
-                "Introduction to Machine Learning",
-                "Web Development with JavaScript",
-                "Data Structures and Algorithms"
-        );
-
-        // Filter courses based on the search input
-        List<String> matchedCourses = new ArrayList<>();
-        for (String course : courses) {
-            if (course.toLowerCase().contains(courseTopic.toLowerCase())) {
-                matchedCourses.add(course);
-            }
-        }
-
-        // Display results
-        if (!matchedCourses.isEmpty()) {
-            StringBuilder sb = new StringBuilder("Courses matching '" + courseTopic + "':\n");
-            for (String course : matchedCourses) {
-                sb.append(course).append("\n");
-            }
-            resultArea.setText(sb.toString());
-        } else {
-            resultArea.setText("No courses found for the topic: " + courseTopic);
-        }
-    }
-
+    // Read the CSV file and load scholarships into a list
     public static List<Scholarship> readCSV(String csvFilePath) {
         List<Scholarship> scholarships = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new FileReader(csvFilePath))) {
             List<String[]> records = reader.readAll();
-            records.remove(0); // Skip header row
+            if (!records.isEmpty()) records.remove(0); // Skip header row if exists
 
             for (String[] record : records) {
-                if (record.length >= 5) { // Ensure there are at least 5 columns (Name, Degree, Funds, Location)
+                if (record.length >= 5) { // Ensure there are at least 5 columns (index, title, degrees, funds, location)
                     String name = record[1];
                     String degree = record[2];
                     String amount = record[3];
-                    String location = record[4]; // Corrected to index 4 for location
+                    String location = record[4].toLowerCase().trim(); // Normalize location to lowercase
 
                     scholarships.add(new Scholarship(name, degree, amount, location));
                 }
             }
-        } catch (IOException | com.opencsv.exceptions.CsvException e) {
+        } catch (IOException | CsvException e) {
             e.printStackTrace();
         }
 
         return scholarships;
     }
 
+    // Filter scholarships based on degree and location
     public static List<Scholarship> filterScholarships(List<Scholarship> scholarships, String degree, String location) {
         List<Scholarship> filteredList = new ArrayList<>();
         for (Scholarship scholarship : scholarships) {
             boolean matchesDegree = degree.equalsIgnoreCase("all") || scholarship.getDegree().toLowerCase().contains(degree.toLowerCase());
-            boolean matchesLocation = location.equalsIgnoreCase("all") || scholarship.getLocation().toLowerCase().contains(location.toLowerCase());
+            boolean matchesLocation = location.equalsIgnoreCase("all") || scholarship.getLocation().contains(location.toLowerCase());
 
             if (matchesDegree && matchesLocation) {
                 filteredList.add(scholarship);
@@ -267,37 +199,34 @@ public class MainClient extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            MainClient client = new MainClient();
-            client.setVisible(true);
-        });
-    }
-}
-
-// Scholarship class
-class Scholarship {
-    private String name;
-    private String degree;
-    private String amount;
-    private String location;
-
-    public Scholarship(String name, String degree, String amount, String location) {
-        this.name = name;
-        this.degree = degree;
-        this.amount = amount;
-        this.location = location;
+        SwingUtilities.invokeLater(() -> new MainClient().setVisible(true));
     }
 
-    public String getDegree() {
-        return degree;
-    }
+    // Scholarship class
+    static class Scholarship {
+        private String name;
+        private String degree;
+        private String amount;
+        private String location;
 
-    public String getLocation() {
-        return location;
-    }
+        public Scholarship(String name, String degree, String amount, String location) {
+            this.name = name;
+            this.degree = degree;
+            this.amount = amount;
+            this.location = location;
+        }
 
-    @Override
-    public String toString() {
-        return "Scholarship Name: " + name + ", Degree: " + degree + ", Amount: " + amount + ", Location: " + location;
+        public String getDegree() {
+            return degree;
+        }
+
+        public String getLocation() {
+            return location;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("Scholarship Name: %s, Degree: %s, Amount: %s, Location: %s", name, degree, amount, location);
+        }
     }
 }
