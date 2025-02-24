@@ -82,7 +82,7 @@ For major changes, please open an issue first to discuss what you would like to 
 
 ## Contact
 
-If you have any questions or suggestions, please feel free to contact us at [your-email@example.com].
+If you have any questions or suggestions, please feel free to contact me at [petranamatovu@gmail.com].
 
 ---
 
