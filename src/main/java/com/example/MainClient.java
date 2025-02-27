@@ -331,7 +331,7 @@ public class MainClient extends JFrame {
             }
         }
 
-        @Override
+        @Override  
         public String toString() {
             return String.format("Scholarship Name: %s, Degree: %s, Amount: %s, Location: %s", name, degree, amount, location);
         }
