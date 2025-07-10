@@ -29,6 +29,7 @@ Good luck with your evaluation!
 
 ## Link
 https://github.com/petra-Nam/education
+https://github.com/petra-Nam/learn-java/discussions
 
 The Matrob Education Finder is a Java Swing desktop application designed to assist students in finding various educational opportunities. It provides a comprehensive platform with the following key functionalities:
 
@@ -133,6 +134,7 @@ Algorithms are manyfold and Java can be used to program these. Examples are sort
     * **Permalink 2 (Udemy Course Filtering):** `[Course Subject Filtering](https://github.com/petra-Nam/education/blob/main/src/main/java/com/example/UdemyCourseFilter.java#L73-98)`
     * **Code Example 3 (Pair Programming with Daniela - Makeup Inventory System):** The `searchProducts()` method in the makeup inventory system performs a linear search through the `products` `ArrayList` to find a product by name.
     * **Permalink 3 (Makeup Product Search):** `[Search Products in Makeup Main](https://github.com/danii-07/Programming-I/blob/main/inventory/makeup/Main.java#L76-L90)`
+    https://github.com/petra-Nam/learn-java/commit/4a4098e5a6ce55c82c026c65fd7356c93f4a0c46
 
 
 | Total Achievable Points | Points Reached During Grading |
@@ -164,7 +166,7 @@ Below are some examples of different data types I’ve used in my Java projects:
 
 String is used to store text. In Java, Strings are immutable, which means once they’re created, their value can’t be changed directly.
 
-# How I used it (Matrob Education Finder – my personal project):
+# How I used it (Matrob Education Finder ):
 
 public static class StudentProfile {
     private String name;
@@ -418,7 +420,7 @@ Concept: Operator Overloading
 
 Explanation: Operator overloading allows a single operator to perform different actions based on the data types it's used with. In Java, the most common example is the + operator: it adds numbers, but it also concatenates (joins) strings.
 
-Code Example from My Project (Matrob Education Finder):
+Code Example from My Project :
 
 Java
 
@@ -586,7 +588,7 @@ Experience 1 (Partner Name: Roic Zone):**
 
 Paste your class diagram for your project that you developed during the peer review class here: 
 
-*your image*
+[*your image*](https://github.com/petra-Nam/education/upload/main)
 
 It can be done very simply by just copying any image and pasting it while editing Readme.md.
 
