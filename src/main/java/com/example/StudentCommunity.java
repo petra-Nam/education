@@ -88,7 +88,7 @@ public class StudentCommunity {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Removed unused variable 'labelFont' to resolve the compile error
+        // Removed unused variable to fix the compile error
         Font fieldFont = new Font("SansSerif", Font.PLAIN, 13);
         Font buttonFont = new Font("SansSerif", Font.PLAIN, 14);
         Color buttonBgColor = new Color(255, 105, 180);
