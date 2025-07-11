@@ -29,7 +29,7 @@ You can download these libraries and add them to your project:
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/yourusername/matrob-education-finder.git
+   git clone https://github.com/petra-Nam/matrob-education-finder.git
    cd matrob-education-finder
    ```
 
@@ -86,6 +86,6 @@ If you have any questions or suggestions, please feel free to contact me at [pet
 
 ---
 
-Thank you for using Matrob Education Finder! We hope it helps you in your educational endeavors.
+Thank you for using Matrob Education Finder! I hope it helps you in your educational endeavors.
 ```
 
