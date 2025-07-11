@@ -191,7 +191,7 @@ if (!foundCourse && primaryRecommendations.isEmpty() && secondaryMatches.isEmpty
 
 I used boolean here to track whether a course had been found or not, so I could show the right message to the user if nothing matched their search.
 
-⸻
+
 
 # int (my own choice)
 
@@ -206,7 +206,7 @@ if (responseCode != HttpURLConnection.HTTP_OK) {
 
 This was part of my API call logic. I used int to check if the HTTP response was successful or if something went wrong.
 
-⸻
+
 
 # Array (or Arrays)
 
