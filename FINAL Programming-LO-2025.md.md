@@ -600,5 +600,23 @@ It can be done very simply by just copying any image and pasting it while editin
 
 
 
+Clarification and Apology Regarding Evaluation Submission
 
+Dear Professor,
+
+I want to sincerely apologize and clarify something regarding my evaluation submission.
+
+You had shared a preparation document with us last week, and I used it seriously to get ready for the evaluation. I had already written down most of my answers in advance  especially my OOP explanations, the classes I used, and all my permalinks.
+
+While preparing, I did use AI to help me phrase or refine some parts of those written answers. During the evaluation, I copied some of those prepared parts into the form.
+
+The entire project and all the code were done by me, and I truly stand by my work. I acknowledge my mistake in copying phrased parts that were AI-assisted, despite the ethics agreement at the top of the form.
+
+Some of the links I submitted which may not work correctly — I will carefully check them again and correct any that were copied wrongly.
+
+I’m happy to walk through my code or redo the written evaluation entirely on my own if needed.
+
+My sincere apologies once again.
+
+Petra Namuyiga
 

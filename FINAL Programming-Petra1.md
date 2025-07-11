@@ -79,7 +79,7 @@ Desktop Integration: Standard Java java.awt.Desktop for opening web links in the
 
 Through the Matrob Education Finder project, i successfully developed a comprehensive and intuitive desktop application designed to significantly streamline the process for students seeking educational opportunities worldwide.
 
-Our key achievements include:
+My key achievements include:
 
 Centralized Opportunity Discovery: I created a single platform where users can efficiently search for scholarships, explore universities globally via an external API, and discover relevant online courses from Udemy, eliminating the need to navigate multiple disparate sources.
 
